@@ -121,5 +121,6 @@ function analyzeSalesData(data, options) {
     sales_count: seller.sales_count,
     top_products: seller.top_products,
     bonus: +seller.bonus.toFixed(2),
-  }));
+  }
+));
 }
