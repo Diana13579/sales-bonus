@@ -19,6 +19,7 @@ function calculateSimpleRevenue(purchase, _product) {
  */
 
 function calculateBonusByProfit(index, total, seller) {
+  // @TODO: Расчет бонуса от позиции в рейтинге
   const { profit } = seller;
   if (index === 0) {
     return profit * 0.15;
@@ -39,6 +40,7 @@ function calculateBonusByProfit(index, total, seller) {
  */
 
 function analyzeSalesData(data, options) {
+  // @TODO: Проверка входных данных
   const { calculateRevenue, calculateBonus } = options;
   if (
     !data ||
@@ -52,6 +54,7 @@ function analyzeSalesData(data, options) {
     throw new Error("Некорректные входные данные");
   }
 
+  // @TODO: Проверка наличия опций
   if (
     !options ||
     typeof options.calculateRevenue !== "function" ||
@@ -60,17 +63,19 @@ function analyzeSalesData(data, options) {
     throw new Error("Некорректные опции");
   }
 
+  // @TODO: Подготовка промежуточных данных для сбора статистики
   const sellerStats = data.sellers.map((seller) => ({
     seller_id: seller.id,
     name: `${seller.first_name} ${seller.last_name}`,
     revenue: 0,
     profit: 0,
     sales_count: 0,
-    // products_sold: {},
+    products_sold: {},
     top_products: 0,
     bonus: 0,
   }));
 
+  // @TODO: Индексация продавцов и товаров для быстрого доступа
   const sellerIndex = Object.fromEntries(
     sellerStats.map((seller) => [seller.seller_id, seller])
   );
@@ -78,6 +83,7 @@ function analyzeSalesData(data, options) {
     data.products.map((product) => [product.sku, product])
   );
 
+  // @TODO: Расчет выручки и прибыли для каждого продавца
   data.purchase_records.forEach((record) => {
     const seller = sellerIndex[record.seller_id];
     if (!seller) return;
@@ -96,8 +102,10 @@ function analyzeSalesData(data, options) {
     });
   });
 
+  // @TODO: Сортировка продавцов по прибыли
   sellerStats.sort((a, b) => b.profit - a.profit);
 
+  // @TODO: Назначение премий на основе ранжирования
   sellerStats.forEach((seller, index) => {
     seller.bonus = options.calculateBonus(index, sellerStats.length, seller);
     seller.top_products = Object.entries(seller.products_sold)
@@ -106,7 +114,8 @@ function analyzeSalesData(data, options) {
       .slice(0, 10);
   });
 
-  return sellerStats.map(seller => ({
+  // @TODO: Подготовка итоговой коллекции с нужными полями
+  return sellerStats.map((seller) => ({
     seller_id: seller.id,
     name: seller.name,
     revenue: +seller.revenue.toFixed(2),
