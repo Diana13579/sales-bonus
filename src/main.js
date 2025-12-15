@@ -95,10 +95,10 @@ function analyzeSalesData(data, options) {
       const revenue = calculateRevenue(item, product);
       const profit = revenue - product.purchase_price * item.quantity;
       seller.profit += profit;
-      if (!seller.products_sold[item.sku]) {
-        seller.products_sold[item.sku] = 0;
+      if (!seller.products_sold[product.sku]) {
+        seller.products_sold[product.sku] = 0;
       }
-      seller.products_sold[item.sku] += item.quantity;
+      seller.products_sold[product.sku] += item.quantity;
     });
   });
 
